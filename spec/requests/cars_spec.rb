@@ -101,5 +101,37 @@ describe '/cars endpoints' do
       end
     end
   end
-  describe 'index'
+
+  describe 'index' do
+    it 'returns 200 status' do
+      get '/cars'
+
+      expect(response).to have_http_status :ok
+    end
+
+    it 'returns all cars' do
+      cars = create_list(:car, 2)
+
+      get '/cars'
+
+      parsed_body = response.parsed_body
+
+      expect(parsed_body).to include('cars')
+      expect(parsed_body['cars'].length).to eq cars.length
+    end
+
+    it 'returns correct json for car' do
+      car = create(:car)
+
+      get '/cars'
+
+      parsed_body = response.parsed_body
+
+      expect(parsed_body).to include('cars')
+
+      returned_car = parsed_body['cars'].first
+
+      expect(returned_car).to eq(car.as_json)
+    end
+  end
 end

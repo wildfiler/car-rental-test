@@ -1,4 +1,10 @@
 class CarsController < ApplicationController
+  def index
+    cars = Car.all
+
+    render json: { cars: cars.as_json, status: :ok }
+  end
+
   def create
     car = Car.new(car_params)
 
