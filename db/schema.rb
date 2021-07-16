@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_16_134953) do
+ActiveRecord::Schema.define(version: 2021_07_16_161754) do
 
   create_table "cars", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "model", null: false
@@ -21,6 +21,16 @@ ActiveRecord::Schema.define(version: 2021_07_16_134953) do
     t.check_constraint "`price` > 0", name: "positive_price"
     t.check_constraint "char_length(`color`) > 0", name: "color_presence"
     t.check_constraint "char_length(`model`) > 0", name: "model_presence"
+  end
+
+  create_table "rents", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "car_id"
+    t.date "start_at"
+    t.date "end_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["car_id"], name: "index_rents_on_car_id"
+    t.check_constraint "`start_at` <= `end_at`", name: "correct_period"
   end
 
 end

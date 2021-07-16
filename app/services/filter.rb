@@ -25,4 +25,12 @@ class Filter
   def max_price(scope, value)
     scope.where('price <= ?', value)
   end
+
+  def start_at(scope, value)
+    scope.where('start_at >= ?', value)
+  end
+
+  def end_at(scope, value)
+    scope.where('end_at <= ?', value)
+  end
 end

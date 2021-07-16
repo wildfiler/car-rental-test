@@ -4,4 +4,10 @@ FactoryBot.define do
     color { 'black' }
     price { 1000 }
   end
+
+  factory :rent do
+    car
+    start_at { Date.today }
+    end_at { Date.today }
+  end
 end
