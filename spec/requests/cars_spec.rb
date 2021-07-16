@@ -66,6 +66,40 @@ describe '/cars endpoints' do
     end
   end
 
-  describe 'delete'
+  describe 'delete' do
+    context 'existing id' do
+      it 'destroys record' do
+        car = create(:car)
+
+        expect do
+          delete "/cars/#{car.id}"
+        end.to change(Car, :count).by(-1)
+      end
+
+      it 'returns 200 status' do
+        car = create(:car)
+
+        delete "/cars/#{car.id}"
+
+        expect(response).to have_http_status :ok
+      end
+    end
+
+    context 'id not found' do
+      it 'does not destroy any records' do
+        car = create(:car)
+
+        expect do
+          delete '/cars/-1'
+        end.not_to change(Car, :count)
+      end
+
+      it 'returns 404 status' do
+        delete '/cars/-1'
+
+        expect(response).to have_http_status :not_found
+      end
+    end
+  end
   describe 'index'
 end

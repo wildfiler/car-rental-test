@@ -11,6 +11,18 @@ class CarsController < ApplicationController
     missing_car
   end
 
+  def destroy
+    car = Car.find_by(id: params[:id])
+
+    if car
+      car.destroy!
+
+      render json: { status: :ok }
+    else
+      head :not_found
+    end
+  end
+
   private
 
   def car_params
