@@ -1,8 +1,10 @@
 class CarsController < ApplicationController
   def index
-    filters = params.permit(:color, :model, :min_price, :max_price).to_h
-    filter = Filter.new(Car.all, filters)
-    cars = filter.call
+    car_filters = params.permit(:color, :model, :min_price, :max_price).to_h
+    car_filter = Filter.new(Car.all, car_filters)
+
+    rents_filters = params.permit(:start_at, :end_at).to_h
+    cars = AvailabilityFilter.new(car_filter.call, rents_filters).call
 
     render json: { cars: cars.as_json, status: :ok }
   end

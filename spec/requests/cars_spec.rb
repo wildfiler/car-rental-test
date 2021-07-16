@@ -168,7 +168,6 @@ describe '/cars endpoints' do
 
           get '/cars', params: { min_price: 50 }
 
-
           expect_correct_cars_in(response, correct_cars)
         end
       end
@@ -199,13 +198,31 @@ describe '/cars endpoints' do
         end
       end
 
+      context 'by rent range' do
+        it 'returns correct records' do
+          correct_car = create(:car)
+          filtered_car = create(:car)
+
+          _rent_1 = create(:rent, car: correct_car, start_at: 1.week.since, end_at: 1.week.since)
+          _rent_2 = create(:rent, car: filtered_car, start_at: Date.today, end_at: Date.tomorrow)
+
+          get '/cars', params: { start_at: Date.today, end_at: Date.tomorrow }
+
+          expect_correct_cars_in(response, [correct_car])
+        end
+      end
+
       context 'multiple filters' do
         it 'returns correct records' do
           correct_cars = create_list(:car, 2, model: 'Tesla', color: 'black')
           _filtered_car_1 = create(:car, model: 'Tesla', color: 'blue')
           _filtered_car_2 = create(:car, model: 'BMW', color: 'black')
+          filtered_car_3 = create(:car, model: 'Tesla', color: 'black')
 
-          get '/cars', params: { color: 'black', model: 'Tesla' }
+          _rent_1 = create(:rent, car: correct_cars.first, start_at: 1.week.since, end_at: 1.week.since)
+          _rent_3 = create(:rent, car: filtered_car_3, start_at: Date.today, end_at: Date.tomorrow)
+
+          get '/cars', params: { color: 'black', model: 'Tesla', start_at: Date.today, end_at: Date.tomorrow }
 
           expect_correct_cars_in(response, correct_cars)
         end
